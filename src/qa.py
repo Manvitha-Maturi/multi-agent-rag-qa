@@ -107,7 +107,7 @@ Items being compared:"""
 
     items = extract_response.choices[0].message.content.strip().split(",")
     items = [i.strip() for i in items]
-    print(f"[DEBUG] Extracted items: {items}")
+    
 
     # Search separately for each item, then combine results
     all_chunks = []
