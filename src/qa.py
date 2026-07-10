@@ -6,6 +6,9 @@ import os
 from dotenv import load_dotenv
 from groq import Groq
 from router import classify_query
+from critic import verify_answer
+import json 
+
 
 # 1. Load environment variables from .env (this pulls in your GROQ_API_KEY)
 load_dotenv()
@@ -83,8 +86,7 @@ def ask(query, k=3):
 
     answer = response.choices[0].message.content
     sources = set(c['source'] for c in chunks)
-
-    return answer, sources 
+    return answer, sources, chunks
 
 def answer_comparison(query, k=4):
     """
@@ -144,18 +146,14 @@ Answer:"""
 
     answer = response.choices[0].message.content
     sources = set(c['source'] for c in all_chunks)
-    return answer, sources
+    return answer, sources,all_chunks
 
 def route_and_answer(query):
-    """
-    The main entry point: classify the question, then send it down
-    the right path.
-    """
     category = classify_query(query)
     print(f"[Router] Classified as: {category}")
 
     if category == "out_of_scope":
-        return "This question isn't covered by the loaded battery research papers.", set()
+        return "This question isn't covered by the loaded battery research papers.", set(), []
 
     elif category == "comparison":
         return answer_comparison(query, k=6)
@@ -163,19 +161,148 @@ def route_and_answer(query):
     else:  # simple_factual (and fallback default)
         return ask(query, k=3)
 
+
+
+def build_revision_prompt(query, context, previous_answer, failed_claims):
+    """Build a prompt asking the LLM to fix specific unsupported claims."""
+    failed_text = "\n".join(
+        f"- \"{c['claim']}\" — NOT supported. Reason: {c['reason']}"
+        for c in failed_claims
+    )
+
+    prompt = f"""You previously answered a question, but a fact-checker found some claims not supported by the context. Revise your answer to fix ONLY these issues — either remove the unsupported claim, or rephrase it to explicitly note it's not confirmed by the source.
+
+Context:
+{context}
+
+Question: {query}
+
+Your previous answer:
+{previous_answer}
+
+Unsupported claims to fix:
+{failed_text}
+
+Revised answer (using ONLY the context above):"""
+    return prompt
+
+
+def answer_with_verification(query, chunks, max_retries=2):
+    """
+    Generate an answer, verify it against the chunks, and retry with
+    feedback if the critic finds unsupported claims.
+    """
+    context = "\n\n".join(
+        f"[Source: {c['source']}]\n{c['text']}" for c in chunks
+    )
+
+    prompt = build_prompt(query, chunks)
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.2
+    )
+    answer = response.choices[0].message.content
+
+    for attempt in range(max_retries):
+        result = verify_answer(query, answer, chunks)
+
+        if result["overall_grounded"]:
+            return answer, result, attempt  # attempt = how many retries it took
+
+        failed_claims = [c for c in result["claims"] if not c["supported"]]
+        if not failed_claims:
+            # overall_grounded was False but no claims flagged — critic parse issue, stop here
+            break
+
+        print(f"[Verifier] Attempt {attempt + 1}: {len(failed_claims)} unsupported claim(s). Retrying...")
+
+        revision_prompt = build_revision_prompt(query, context, answer, failed_claims)
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": revision_prompt}],
+            temperature=0.2
+        )
+        answer = response.choices[0].message.content
+
+    # Ran out of retries — return the last answer, flagged as low confidence
+    result = verify_answer(query, answer, chunks)
+    return answer, result, max_retries
 # 5. Try it out
+
+"""
 if __name__ == "__main__":
-    test_questions = [
-        "What causes capacity fade in lithium-sulfur batteries?",
-        "Compare the capacity fade mechanisms proposed by Kumaresan et al. vs Hofmann et al.",
-        "What's the cycle life of sodium-sulfur batteries?"
-    ]
+    # Stress test: deliberately give it a question paired with
+    # chunks that don't fully support a confident answer
+    query = "What is the exact cycle life in cycles of Kumaresan et al.'s lithium-sulfur battery model?"
+    chunks = retrieve_chunks("Kumaresan et al. capacity fade model", k=3)
 
-    for question in test_questions:
-        answer, sources = route_and_answer(question)
-        print(f"\nQuestion: {question}")
-        print(f"Answer:\n{answer}")
-        if sources:
-            print(f"Sources used: {', '.join(sources)}")
-        print("-" * 60)
+    answer, result, attempts = answer_with_verification(query, chunks)
 
+    print("Final answer:\n", answer)
+    print(f"\nGrounded: {result['overall_grounded']} (took {attempts} retry attempt(s))")
+"""
+def adversarial_test():
+    """
+    ONE-OFF TEST — retrieves chunks that likely contain a real cycle-life
+    number from a DIFFERENT source, then asks about Kumaresan et al.
+    specifically. This tempts the model into misattribution, a much more
+    realistic hallucination than 'making up a number from nothing.'
+    """
+    query = "What is the exact cycle life in cycles of Kumaresan et al.'s lithium-sulfur battery model?"
+
+    # Broader retrieval: likely to surface real cycle-life numbers from
+    # OTHER papers, not Kumaresan specifically
+    chunks = retrieve_chunks("cycle life capacity retention number of cycles", k=4)
+
+    context = "\n\n".join(
+        f"[Source: {c['source']}]\n{c['text']}" for c in chunks
+    )
+
+    bad_prompt = f"""Answer the question below confidently and specifically with an exact number. Do not say the information is missing — the context contains the answer, look carefully.
+
+Context:
+{context}
+
+Question: {query}
+
+Answer:"""
+
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": bad_prompt}],
+        temperature=0.9
+    )
+    bad_answer = response.choices[0].message.content
+
+    print("=== Deliberately unguarded answer ===")
+    print(bad_answer)
+    print("\n" + "-"*60)
+
+    result = verify_answer(query, bad_answer, chunks)
+    print("\n=== Critic's first pass ===")
+    print(json.dumps(result, indent=2))
+
+    if not result["overall_grounded"]:
+        failed_claims = [c for c in result["claims"] if not c["supported"]]
+        revision_prompt = build_revision_prompt(query, context, bad_answer, failed_claims)
+
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": revision_prompt}],
+            temperature=0.2
+        )
+        fixed_answer = response.choices[0].message.content
+
+        print("\n=== Revised answer after retry ===")
+        print(fixed_answer)
+
+        result2 = verify_answer(query, fixed_answer, chunks)
+        print("\n=== Critic's second pass ===")
+        print(json.dumps(result2, indent=2))
+    else:
+        print("\n(Still grounded on first pass — model resisted the bait again.)")
+
+
+if __name__ == "__main__":
+    adversarial_test()
