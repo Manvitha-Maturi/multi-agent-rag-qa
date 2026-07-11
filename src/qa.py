@@ -5,8 +5,8 @@ import pickle
 import os
 from dotenv import load_dotenv
 from groq import Groq
-from router import classify_query
-from critic import verify_answer
+from src.router import classify_query
+from src.critic import verify_answer
 import json 
 
 
@@ -88,79 +88,47 @@ def ask(query, k=3):
     sources = set(c['source'] for c in chunks)
     return answer, sources, chunks
 
-def answer_comparison(query, k=4):
+def retrieve_hybrid(query, k=8):
     """
-    For comparison questions, we search separately for each entity 
-    being compared (rather than one search on the whole question),
-    then combine the results so both sides are represented.
+    Retrieval-only version of the comparison logic: LLM identifies the
+    two entities being compared, then retrieves per-entity via keyword +
+    semantic search. No generation — chunks only, for the orchestrator
+    to hand to answer_with_verification().
+
+    KNOWN LIMITATION (found Day 6): entity extraction assumes the query
+    already names two comparable things (e.g. "X vs Y"). For vaguer
+    comparison queries (e.g. "compare across different authors"), the LLM
+    fabricates near-duplicate pseudo-entities, keyword_search returns 0
+    for both, and results depend entirely on semantic search happening
+    to share vocabulary with the real topic. Currently silent — no error,
+    just degraded retrieval. Deferred to Day 7 eval harness alongside the
+    critic's lexical-match blind spot.
     """
-    # Ask the LLM to pull out the 2 things being compared
     extract_prompt = f"""Identify the two specific things being compared in this question (e.g. two authors, two mechanisms, two methods). Reply with ONLY the two items, separated by a comma, nothing else.
-
-Question: {query}
-
-Items being compared:"""
-
+    Question: {query}
+    Items being compared:"""
     extract_response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[{"role": "user", "content": extract_prompt}],
         temperature=0
     )
-
     items = extract_response.choices[0].message.content.strip().split(",")
     items = [i.strip() for i in items]
-    
 
-    # Search separately for each item, then combine results
     all_chunks = []
     for item in items:
-      # Strip "et al." so we search for just the name itself
-       name = item.replace("et al.", "").replace("et al", "").strip()
+        name = item.replace("et al.", "").replace("et al", "").strip()
+        all_chunks.extend(keyword_search(name, limit=3))
+        all_chunks.extend(retrieve_chunks(f"{name} capacity fade mechanism", k=2))
 
-       # 1. Keyword search: find chunks literally containing the name
-       all_chunks.extend(keyword_search(name, limit=3))
+    seen = set()
+    deduped = []
+    for c in all_chunks:
+        if c['text'] not in seen:
+            seen.add(c['text'])
+            deduped.append(c)
 
-       # 2. Semantic search: find chunks about the topic
-       all_chunks.extend(retrieve_chunks(f"{name} capacity fade mechanism", k=2))
-
-
-    context = "\n\n".join(
-        f"[Source: {c['source']}]\n{c['text']}" for c in all_chunks
-    )
-
-    prompt = f"""Answer the question by explicitly comparing the relevant sources below. Structure your answer to clearly show similarities and differences. Use ONLY the context provided — if the context doesn't cover one side of the comparison, say so explicitly.
-
-Context:
-{context}
-
-Question: {query}
-
-Answer:"""
-
-
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.2
-    )
-
-    answer = response.choices[0].message.content
-    sources = set(c['source'] for c in all_chunks)
-    return answer, sources,all_chunks
-
-def route_and_answer(query):
-    category = classify_query(query)
-    print(f"[Router] Classified as: {category}")
-
-    if category == "out_of_scope":
-        return "This question isn't covered by the loaded battery research papers.", set(), []
-
-    elif category == "comparison":
-        return answer_comparison(query, k=6)
-
-    else:  # simple_factual (and fallback default)
-        return ask(query, k=3)
-
+    return deduped[:k]
 
 
 def build_revision_prompt(query, context, previous_answer, failed_claims):
