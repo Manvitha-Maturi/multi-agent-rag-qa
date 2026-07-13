@@ -24,6 +24,9 @@ model = SentenceTransformer("all-mpnet-base-v2")
 index = faiss.read_index("data/index/faiss.index")
 with open("data/index/chunks.pkl", "rb") as f:
     data = pickle.load(f)
+# Sentinel the answerer emits when retrieved context can't support an answer.
+# Lets the pipeline flag refusals structurally instead of sniffing prose.
+REFUSAL_SENTINEL = "INSUFFICIENT_CONTEXT"
 
 
 def retrieve_chunks(query, k=3):
@@ -62,7 +65,11 @@ def build_prompt(query, chunks):
         f"[Source: {c['source']}]\n{c['text']}" for c in chunks
     )
 
-    prompt = f"""Answer the question using ONLY the context below. If the context doesn't contain enough information to answer, say so — do not use outside knowledge.
+    prompt = f"""Answer the question using ONLY the context below. Do not use outside knowledge.
+
+If the context does not contain enough information to answer, respond with this exact first line:
+{REFUSAL_SENTINEL}
+followed by one sentence naming what is missing. Do not attempt a partial answer in that case.
 
 Context:
 {context}
@@ -171,6 +178,11 @@ def answer_with_verification(query, chunks, max_retries=2):
         temperature=0.2
     )
     answer = response.choices[0].message.content
+    
+    # Refusal: model declined because context was insufficient. Nothing to
+    # verify, nothing to retry — flag it and return immediately.
+    if answer.strip().upper().startswith(REFUSAL_SENTINEL):
+        return answer, {"overall_grounded": True, "refused": True, "claims": []}, 0
 
     for attempt in range(max_retries):
         result = verify_answer(query, answer, chunks)

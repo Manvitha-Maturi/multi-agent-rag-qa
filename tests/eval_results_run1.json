@@ -1,0 +1,466 @@
+[
+  {
+    "id": "sf_01",
+    "category": "simple_factual",
+    "question": "According to Kumaresan, Mikhaylik, and White, what physical processes are included in the lithium-sulfur cell model?",
+    "expected_route": "simple_factual",
+    "actual_route": "simple_factual",
+    "route_correct": true,
+    "expected_sources": [
+      "A Mathematical Model for a Lithium Sulfur Cell.pdf"
+    ],
+    "actual_sources": [
+      "A Mathematical Model for a Lithium Sulfur Cell.pdf",
+      "Brieske 2023 (1).pdf"
+    ],
+    "precision": 0.5,
+    "recall": 1.0,
+    "verified": true,
+    "refused": true,
+    "retries": 0,
+    "answer": "INSUFFICIENT_CONTEXT\nThe context is missing information about Kumaresan, Mikhaylik, and White, as well as their work on the lithium-sulfur cell model.",
+    "claims": []
+  },
+  {
+    "id": "sf_02",
+    "category": "simple_factual",
+    "question": "What does the Kumaresan et al. mathematical model aim to explain about the discharge profile of a lithium-sulfur cell?",
+    "expected_route": "simple_factual",
+    "actual_route": "simple_factual",
+    "route_correct": true,
+    "expected_sources": [
+      "A Mathematical Model for a Lithium Sulfur Cell.pdf"
+    ],
+    "actual_sources": [
+      "1-s2.0-S0013468618315378-main.pdf",
+      "1-s2.0-S0378775314002754-main.pdf",
+      "anode paper (1).pdf"
+    ],
+    "precision": 0.0,
+    "recall": 0.0,
+    "verified": true,
+    "refused": false,
+    "retries": 0,
+    "answer": "The Kumaresan et al. mathematical model aims to explain the two-stage discharge profile of a lithium-sulfur cell, and it accurately captures this profile by including multistep electrochemical sulfur reduction, multicomponent transport, and precipitation/dissolution reactions within the porous cathode.",
+    "claims": [
+      {
+        "claim": "The Kumaresan et al. mathematical model aims to explain the two-stage discharge profile of a lithium-sulfur cell",
+        "supported": true,
+        "reason": "Directly stated in the context"
+      },
+      {
+        "claim": "The model accurately captures the two-stage discharge profile",
+        "supported": true,
+        "reason": "Directly stated in the context"
+      },
+      {
+        "claim": "The model includes multistep electrochemical sulfur reduction",
+        "supported": true,
+        "reason": "Directly stated in the context"
+      },
+      {
+        "claim": "The model includes multicomponent transport",
+        "supported": true,
+        "reason": "Directly stated in the context"
+      },
+      {
+        "claim": "The model includes precipitation/dissolution reactions within the porous cathode",
+        "supported": true,
+        "reason": "Directly stated in the context"
+      }
+    ]
+  },
+  {
+    "id": "sf_03",
+    "category": "simple_factual",
+    "question": "According to Mistry and Mukherjee, what are the two transport modes that make up polysulfide transport?",
+    "expected_route": "simple_factual",
+    "actual_route": "simple_factual",
+    "route_correct": true,
+    "expected_sources": [
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf"
+    ],
+    "actual_sources": [
+      "Mistry supporting.pdf",
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf",
+      "anode paper (1).pdf"
+    ],
+    "precision": 0.3333333333333333,
+    "recall": 1.0,
+    "verified": true,
+    "refused": false,
+    "retries": 0,
+    "answer": "The two transport modes that make up polysulfide transport are di\ufb00usive and migration contributions.",
+    "claims": [
+      {
+        "claim": "The two transport modes that make up polysulfide transport are di\ufb00usive and migration contributions.",
+        "supported": true,
+        "reason": "Directly stated in the context"
+      }
+    ]
+  },
+  {
+    "id": "sf_04",
+    "category": "simple_factual",
+    "question": "What does Mistry and Mukherjee define the capacity defect (Q-delta) as?",
+    "expected_route": "simple_factual",
+    "actual_route": "simple_factual",
+    "route_correct": true,
+    "expected_sources": [
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf"
+    ],
+    "actual_sources": [
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf"
+    ],
+    "precision": 1.0,
+    "recall": 1.0,
+    "verified": true,
+    "refused": false,
+    "retries": 0,
+    "answer": "Mistry defines the capacity defect (Q\u0394) as capacity loss due to chemical reduction at the anode surface.",
+    "claims": [
+      {
+        "claim": "Mistry defines the capacity defect (Q\u0394) as capacity loss due to chemical reduction at the anode surface.",
+        "supported": true,
+        "reason": "Directly stated in the context: 'capacity defect, Q\u0394is capacity loss due to chemical reduction at the anode surface;'"
+      }
+    ]
+  },
+  {
+    "id": "sf_05",
+    "category": "simple_factual",
+    "question": "In the Mistry supporting information, what theory is recommended for describing transport in the multispecies electrolyte?",
+    "expected_route": "simple_factual",
+    "actual_route": "simple_factual",
+    "route_correct": true,
+    "expected_sources": [
+      "Mistry supporting.pdf"
+    ],
+    "actual_sources": [
+      "1-s2.0-S0013468618315378-main.pdf",
+      "A Mathematical Model for a Lithium Sulfur Cell.pdf",
+      "Mistry supporting.pdf"
+    ],
+    "precision": 0.3333333333333333,
+    "recall": 1.0,
+    "verified": true,
+    "refused": false,
+    "retries": 0,
+    "answer": "Concentrated solution theory is recommended for describing transport in the multispecies electrolyte.",
+    "claims": [
+      {
+        "claim": "Concentrated solution theory is recommended for describing transport in the multispecies electrolyte.",
+        "supported": true,
+        "reason": "Directly stated in the Mistry supporting information"
+      }
+    ]
+  },
+  {
+    "id": "sf_06",
+    "category": "simple_factual",
+    "question": "According to the Mistry supporting information, what does a smaller chemical overpotential imply?",
+    "expected_route": "simple_factual",
+    "actual_route": "simple_factual",
+    "route_correct": true,
+    "expected_sources": [
+      "Mistry supporting.pdf"
+    ],
+    "actual_sources": [
+      "1-s2.0-S0013468618315378-main.pdf",
+      "664071.pdf",
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf"
+    ],
+    "precision": 0.0,
+    "recall": 0.0,
+    "verified": true,
+    "refused": true,
+    "retries": 0,
+    "answer": "INSUFFICIENT_CONTEXT\nThe context does not contain information about the relationship between chemical overpotential and other variables in the Mistry supporting information.",
+    "claims": []
+  },
+  {
+    "id": "sf_07",
+    "category": "simple_factual",
+    "question": "How does Mistry and Mukherjee distinguish reversible from irreversible capacity defects?",
+    "expected_route": "simple_factual",
+    "actual_route": "simple_factual",
+    "route_correct": true,
+    "expected_sources": [
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf"
+    ],
+    "actual_sources": [
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf"
+    ],
+    "precision": 1.0,
+    "recall": 1.0,
+    "verified": true,
+    "refused": false,
+    "retries": 0,
+    "answer": "Mistry distinguishes reversible from irreversible capacity defects based on whether the reduced species returns back to the electrolyte (reversible) or deposits at the anode (irreversible), as defined by the terms: reversible capacity defect (Qrev) and irreversible capacity defect (Qirr).",
+    "claims": [
+      {
+        "claim": "Mistry distinguishes reversible from irreversible capacity defects based on whether the reduced species returns back to the electrolyte or deposits at the anode",
+        "supported": true,
+        "reason": "direct definition in the context"
+      },
+      {
+        "claim": "reversible capacity defect is defined by the term Qrev",
+        "supported": true,
+        "reason": "direct definition in the context"
+      },
+      {
+        "claim": "irreversible capacity defect is defined by the term Qirr",
+        "supported": true,
+        "reason": "direct definition in the context"
+      }
+    ]
+  },
+  {
+    "id": "sf_08",
+    "category": "simple_factual",
+    "question": "According to Mistry and Mukherjee, how does the polysulfide shuttle behave between reaction-limited and shuttle-limited regimes?",
+    "expected_route": "simple_factual",
+    "actual_route": "simple_factual",
+    "route_correct": true,
+    "expected_sources": [
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf"
+    ],
+    "actual_sources": [
+      "Mistry supporting.pdf",
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf"
+    ],
+    "precision": 0.5,
+    "recall": 1.0,
+    "verified": true,
+    "refused": true,
+    "retries": 0,
+    "answer": "INSUFFICIENT_CONTEXT\nThe context does not provide a clear explanation of how the polysulfide shuttle behaves between reaction-limited and shuttle-limited regimes, only mentioning that the study demonstrates the polysulfide shuttle effect can be bounded between these two regimes.",
+    "claims": []
+  },
+  {
+    "id": "sf_09",
+    "category": "simple_factual",
+    "question": "How does Mistry supporting information contrast electrochemical sulfur reduction at the cathode with chemical reduction at the lithium anode?",
+    "expected_route": "simple_factual",
+    "actual_route": "comparison",
+    "route_correct": false,
+    "expected_sources": [
+      "Mistry supporting.pdf"
+    ],
+    "actual_sources": [
+      "Brieske 2023 (1).pdf",
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf",
+      "anode paper (1).pdf"
+    ],
+    "precision": 0.0,
+    "recall": 0.0,
+    "verified": true,
+    "refused": false,
+    "retries": 0,
+    "answer": "Mistry's supporting information contrasts electrochemical sulfur reduction at the cathode, where electrons are exchanged with the external circuit, with chemical reduction at the anode, which is a purely chemical process and does not involve electron exchange with the external circuit, instead exhibiting a set of reactions that take place at the anode surface.",
+    "claims": [
+      {
+        "claim": "Mistry's supporting information contrasts electrochemical sulfur reduction at the cathode, where electrons are exchanged with the external circuit",
+        "supported": true,
+        "reason": "CONTEXT states electrochemical reduction of sulfur at the cathode where electrons are exchanged with the external circuit"
+      },
+      {
+        "claim": "with chemical reduction at the anode, which is a purely chemical process",
+        "supported": true,
+        "reason": "CONTEXT states these reactions are di\ufb00erent than the electrochemical reduction of sulfur at the cathode and are purely chemical in nature"
+      },
+      {
+        "claim": "and does not involve electron exchange with the external circuit",
+        "supported": true,
+        "reason": "CONTEXT implies this by stating the reduction at the anode is purely chemical in nature, different from electrochemical reduction at the cathode"
+      },
+      {
+        "claim": "instead exhibiting a set of reactions that take place at the anode surface",
+        "supported": true,
+        "reason": "CONTEXT states a commensurate set of reactions takes place at the anode surface and exhibits chemical nature"
+      }
+    ]
+  },
+  {
+    "id": "cmp_01",
+    "category": "comparison",
+    "question": "How does Mistry and Mukherjee's analysis of the polysulfide shuttle differ in scope from the cell model of Kumaresan, Mikhaylik, and White?",
+    "expected_route": "comparison",
+    "actual_route": "comparison",
+    "route_correct": true,
+    "expected_sources": [
+      "A Mathematical Model for a Lithium Sulfur Cell.pdf",
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf"
+    ],
+    "actual_sources": [
+      "1-s2.0-S0013468618315378-main.pdf",
+      "1-s2.0-S0378775312019568-main.pdf",
+      "Brieske 2023 (1).pdf",
+      "Mistry supporting.pdf",
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf"
+    ],
+    "precision": 0.2,
+    "recall": 0.5,
+    "verified": true,
+    "refused": true,
+    "retries": 0,
+    "answer": "INSUFFICIENT_CONTEXT\nThe context does not mention Mistry and Mukherjee's analysis or the cell model of Kumaresan, Mikhaylik, and White, making it impossible to compare their scopes.",
+    "claims": []
+  },
+  {
+    "id": "cmp_02",
+    "category": "comparison",
+    "question": "Compare how Mistry and Mukherjee versus Kumaresan et al. represent sulfur species transport.",
+    "expected_route": "comparison",
+    "actual_route": "comparison",
+    "route_correct": true,
+    "expected_sources": [
+      "A Mathematical Model for a Lithium Sulfur Cell.pdf",
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf"
+    ],
+    "actual_sources": [
+      "1-s2.0-S0013468618315378-main.pdf",
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf",
+      "anode paper (1).pdf"
+    ],
+    "precision": 0.3333333333333333,
+    "recall": 0.5,
+    "verified": true,
+    "refused": true,
+    "retries": 0,
+    "answer": "INSUFFICIENT_CONTEXT\nThe context does not provide a direct comparison of how Mistry and Mukherjee versus Kumaresan et al. represent sulfur species transport, as Kumaresan et al.'s work is only mentioned in relation to their mathematical model and its limitations, without detailing their specific representation of sulfur species transport.",
+    "claims": []
+  },
+  {
+    "id": "cmp_03",
+    "category": "comparison",
+    "question": "How does the treatment of precipitation differ between the Kumaresan et al. model and the Mistry and Mukherjee shuttle analysis?",
+    "expected_route": "comparison",
+    "actual_route": "comparison",
+    "route_correct": true,
+    "expected_sources": [
+      "A Mathematical Model for a Lithium Sulfur Cell.pdf",
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf"
+    ],
+    "actual_sources": [
+      "1-s2.0-S0013468618315378-main.pdf",
+      "Brieske 2023 (1).pdf"
+    ],
+    "precision": 0.0,
+    "recall": 0.0,
+    "verified": true,
+    "refused": true,
+    "retries": 0,
+    "answer": "INSUFFICIENT_CONTEXT\nThe context is missing information about the Kumaresan et al. model and the Mistry and Mukherjee shuttle analysis, as well as their treatment of precipitation.",
+    "claims": []
+  },
+  {
+    "id": "cmp_vague_01",
+    "category": "comparison_vague",
+    "question": "Compare the capacity fade mechanisms discussed by different authors.",
+    "expected_route": "comparison",
+    "actual_route": "comparison",
+    "route_correct": true,
+    "expected_sources": [],
+    "actual_sources": [
+      "1-s2.0-S0013468618315378-main.pdf",
+      "Mistry \u201cShuttle\u201d in Polysulfide Shuttle_ Friend or Foe_.pdf"
+    ],
+    "precision": null,
+    "recall": null,
+    "verified": true,
+    "refused": true,
+    "retries": 0,
+    "answer": "INSUFFICIENT_CONTEXT\nThe context is missing a comprehensive comparison of the capacity fade mechanisms discussed by different authors, as it only provides snippets of text from various sources without a direct comparison of their findings.",
+    "claims": []
+  },
+  {
+    "id": "cmp_vague_02",
+    "category": "comparison_vague",
+    "question": "How do the various papers explain performance differences between cells?",
+    "expected_route": "comparison",
+    "actual_route": "comparison",
+    "route_correct": true,
+    "expected_sources": [],
+    "actual_sources": [
+      "1-s2.0-S0013468618315378-main.pdf",
+      "Brieske 2023 (1).pdf",
+      "anode paper (1).pdf"
+    ],
+    "precision": null,
+    "recall": null,
+    "verified": true,
+    "refused": true,
+    "retries": 0,
+    "answer": "INSUFFICIENT_CONTEXT\nThe context does not provide a comprehensive comparison of the performance differences between cells across the various papers, as it appears to be a collection of excerpts from different studies focusing on specific aspects of Li-S batteries.",
+    "claims": []
+  },
+  {
+    "id": "oos_01",
+    "category": "out_of_scope",
+    "question": "Who won the 2022 FIFA World Cup?",
+    "expected_route": "out_of_scope",
+    "actual_route": "out_of_scope",
+    "route_correct": true,
+    "expected_sources": [],
+    "actual_sources": [],
+    "precision": null,
+    "recall": null,
+    "verified": false,
+    "refused": false,
+    "retries": 0,
+    "answer": "This question is outside the scope of the lithium-sulfur battery corpus, so I can't answer it from these documents.",
+    "claims": []
+  },
+  {
+    "id": "oos_02",
+    "category": "out_of_scope",
+    "question": "What is the capital city of Australia?",
+    "expected_route": "out_of_scope",
+    "actual_route": "out_of_scope",
+    "route_correct": true,
+    "expected_sources": [],
+    "actual_sources": [],
+    "precision": null,
+    "recall": null,
+    "verified": false,
+    "refused": false,
+    "retries": 0,
+    "answer": "This question is outside the scope of the lithium-sulfur battery corpus, so I can't answer it from these documents.",
+    "claims": []
+  },
+  {
+    "id": "oos_border_01",
+    "category": "out_of_scope_border",
+    "question": "How does solid-electrolyte interphase (SEI) formation influence graphite anodes in lithium-ion batteries?",
+    "expected_route": "out_of_scope",
+    "actual_route": "out_of_scope",
+    "route_correct": true,
+    "expected_sources": [],
+    "actual_sources": [],
+    "precision": null,
+    "recall": null,
+    "verified": false,
+    "refused": false,
+    "retries": 0,
+    "answer": "This question is outside the scope of the lithium-sulfur battery corpus, so I can't answer it from these documents.",
+    "claims": []
+  },
+  {
+    "id": "oos_border_02",
+    "category": "out_of_scope_border",
+    "question": "How does nickel-rich NMC cathode degradation affect lithium-ion battery cycle life?",
+    "expected_route": "out_of_scope",
+    "actual_route": "out_of_scope",
+    "route_correct": true,
+    "expected_sources": [],
+    "actual_sources": [],
+    "precision": null,
+    "recall": null,
+    "verified": false,
+    "refused": false,
+    "retries": 0,
+    "answer": "This question is outside the scope of the lithium-sulfur battery corpus, so I can't answer it from these documents.",
+    "claims": []
+  }
+]

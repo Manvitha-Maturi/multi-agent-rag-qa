@@ -10,7 +10,9 @@ class QAResult:
     answer: str = ""
     sources: list = field(default_factory=list)
     verified: bool = False
+    refused: bool = False
     retries: int = 0
+    claims: list = field(default_factory=list)
     trace: list = field(default_factory=list)
 
 
@@ -50,10 +52,14 @@ def run_pipeline(question: str) -> QAResult:
     answer, verify_result, retries = answer_with_verification(question, chunks)
     result.answer = answer
     result.verified = verify_result["overall_grounded"]
+    result.claims = verify_result.get("claims", [])
+    result.refused = verify_result.get("refused", False)
     result.retries = retries
     result.sources = sorted(set(c["source"] for c in chunks))
-    result.trace.append(f"critic: grounded={result.verified}, retries={retries}")
-
+    if result.refused:
+        result.trace.append(f"critic: refused (insufficient context), retries={retries}")
+    else:
+        result.trace.append(f"critic: grounded={result.verified}, retries={retries}")
     return result
 
 

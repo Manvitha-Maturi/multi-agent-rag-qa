@@ -61,16 +61,3 @@ JSON:"""
 
     return result
 
-
-if __name__ == "__main__":
-    from qa import ask
-
-    query = "What causes capacity fade in lithium-sulfur batteries?"
-    answer, sources, chunks = ask(query, k=3)
-
-    print("Answer:\n", answer)
-    print("\n" + "-"*60)
-
-    result = verify_answer(query, answer, chunks)
-    print("\nCritic result:")
-    print(json.dumps(result, indent=2))
